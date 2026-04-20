@@ -2,7 +2,7 @@
 #include <stdlib.h>
 /* word node */
 typedef struct word_node {
-    char word[];
+    char word[100];
     struct word_node* next;
 }word_node;
 typedef word_node * ptr_word;
