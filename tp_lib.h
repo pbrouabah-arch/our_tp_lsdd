@@ -17,12 +17,14 @@ typedef paragraph_node * ptr_paragraph;
 typedef struct file_node {
     struct paragraph_node* paragraphs;
 }file_node;
-void allocate(word_node *p);
-void FREE(word_node p);
-void ass_val(word_node p,int v);
-void ass_adr(word_node p,word_node q);
-int value(word_node p);
-word_node next(word_node p);
+/*abstract machines of word*/
+void allocate(ptr_word *p);
+void FREE(ptr_word p);
+void ass_val(ptr_word p,char* v);
+void ass_adr(ptr_word p,ptr_word q);
+char* words(ptr_word p);
+ptr_word next(ptr_word p);
+/*abstract machines of paragraph*/ 
 void all_paragraph( ptr_paragraph *p) ;
 void free_paragraph(ptr_paragraph p); 
 void set_words(ptr_paragraph p, ptr_word w);  
