@@ -23,3 +23,4 @@ int value(word_node p);
 word_node next(word_node p);
 
 wesh bsmala
+sa7iti zineb
