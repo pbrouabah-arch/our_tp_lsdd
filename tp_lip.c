@@ -1,27 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "tp_lib.h"
-void allocate(word_node *p){
+void allocate(ptr_word *p){
 *p= malloc(sizeof(word_node));
 
 }
 /*..................................................................*/
-void FREE(word_node p){
+void FREE(ptr_word p){
 free(p);
 }
 /*..................................................................*/
-void ass_val(word_node p,int v){
-p->val=v;
+void ass_word(ptr_word p,char* v){
+strcpy(p->word, v);
 }
 /*..................................................................*/
-void ass_adr(word_node p,pointer q){
+void ass_adr(ptr_word p,ptr_word q){
 p->addr=q;
 }
 /*..................................................................*/
-int value(word_node p){
-return p->val;
+char* words(ptr_word p){
+return p->word;
 }
-pointer next(word_node p){
+ptr_word next(ptr_word p){
 return p->addr;
 }
 /*..........................................................*/
