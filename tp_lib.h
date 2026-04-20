@@ -23,4 +23,5 @@ void ass_val(word_node p,int v);
 void ass_adr(word_node p,word_node q);
 int value(word_node p);
 word_node next(word_node p);
-
+void all_paragraph( ptr_paragraph *p) ;
+void free_paragraph(ptr_paragraph p); 
