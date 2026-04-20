@@ -1,20 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 /* word node */
-struct word_node {
+typedef struct word_node {
     char word[50];
     struct word_node* next;
-};
+}word_node;
+typedef word_node * ptr_word;
 
 /* paragraph node */
-struct paragraph_node {
+typedef struct paragraph_node {
     struct word_node* words;
     struct paragraph_node* next;
-};
+}paragraph_node;
+typedef paragraph_node * ptr_paragraph;
 /* file node */
-struct file_node {
+typedef struct file_node {
     struct paragraph_node* paragraphs;
-};
+}file_node;
 void allocate(word_node *p);
 void FREE(word_node p);
 void ass_val(word_node p,int v);
