@@ -36,15 +36,15 @@ void free_paragraph(ptr_paragraph p) {
     free(p);
 }
 /*...........................................................................................*/
-void set_words(ptr_paragraph p, ptr_word w) {
+void up_words(ptr_paragraph p, ptr_word w) {
     p->words = w;
 }
 /*.....................................................................................*/
-void set_next_para(ptr_paragraph p, ptr_paragraph q) {
+void up_next_para(ptr_paragraph p, ptr_paragraph q) {
     p->next = q;
 }
 /*............................................................................................*/
-ptr_word get_words(ptr_paragraph p) {
+ptr_word return_words(ptr_paragraph p) {
     return p->words;
 }
 /*.............................................................................................*/
