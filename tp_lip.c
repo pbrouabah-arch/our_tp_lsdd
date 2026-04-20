@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "tp_lib.h"
 void allocate(word_node *p){
-*p= malloc(sizeof(cell));
+*p= malloc(sizeof(word_node));
 
 }
 /*..................................................................*/
