@@ -20,10 +20,13 @@ typedef struct file_node {
 /*abstract machines of word*/
 void allocate(ptr_word *p);
 void FREE(ptr_word p);
-void ass_val(ptr_word p,char* v);
+void ass_word(ptr_word p,char* v);
 void ass_adr(ptr_word p,ptr_word q);
 char* words(ptr_word p);
 ptr_word next(ptr_word p);
+void add_word(ptr_word *h,char* v);
+bool exists_word(ptr_word *h,char* v);
+void free_words(ptr_word h);
 /*abstract machines of paragraph*/ 
 void all_paragraph( ptr_paragraph *p) ;
 void free_paragraph(ptr_paragraph p); 
