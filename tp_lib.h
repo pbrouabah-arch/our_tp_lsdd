@@ -27,6 +27,9 @@ ptr_word next(ptr_word p);
 void add_word(ptr_word *h,char* v);
 bool exists_word(ptr_word *h,char* v);
 void free_words(ptr_word h);
+void print_words(ptr_word h);
+/*----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------*/
 /*abstract machines of paragraph*/ 
 void all_paragraph( ptr_paragraph *p) ;
 void free_paragraph(ptr_paragraph p); 
