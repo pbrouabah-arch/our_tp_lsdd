@@ -22,10 +22,48 @@ p->addr=q;
 char* words(ptr_word p){
 return p->word;
 }
+/*..................................................................*/
 ptr_word next(ptr_word p){
 return p->addr;
 }
-/*..........................................................*/
+/*..................................................................*/
+char* words(ptr_word p){
+return p->word;
+}
+/*..................................................................*/
+ptr_word next(ptr_word p){
+return p->addr;}
+/*..................................................................*/
+void add_word(ptr_word *h,char* v){
+    ptr_word p=NULL;ptr_word s=NULL;ptr_word r=NULL;
+    p=*h;
+    while(p!= NULL){r=p;
+            p=next(p);}
+    allocate(&s);
+    ass_word(s,v);
+    ass_adr(r,s);
+    ass_adr(s,NULL);
+}
+/*...................................................................*/
+
+bool exists_word(ptr_word *h, char* v){
+    ptr_word p = *h;
+
+    while(p != NULL){
+        if(strcmp(words(p), v) == 0){
+            return 1;
+        }
+        p = next(p);
+    }
+
+    return 0;}
+/*..................................................................*/
+void free_words(ptr_word h){
+    ptr_word p = h;ptr_word q=NULL;
+while(p != NULL){q=p;p=next(p);FREE(q);}
+
+}
+/*.................................................................*/
 void alloc_paragraph(ptr_paragraph *p) {
     *p = malloc(sizeof(paragraph_node));
     (*p)->words = NULL;
