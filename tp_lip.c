@@ -103,7 +103,7 @@ void add_paragraph(ptr_paragraph *head, ptr_word w) {
     // create the new paragraph
     ptr_paragraph new_para;
     alloc_paragraph(&new_para);
-    set_words(new_para, w);
+    up_words(new_para, w);
 
     //  if the list is empty this paragraph will be the first one 
     if (*head == NULL) {
