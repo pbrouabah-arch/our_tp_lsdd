@@ -38,4 +38,5 @@ void up_next_para(ptr_paragraph p, ptr_paragraph q); // relie 2 paragraph
 ptr_word return_words(ptr_paragraph p);   // recupere la liste des mots de paragraph
 ptr_paragraph next_para(ptr_paragraph p);  // move to the next p
 void add_paragraph(ptr_paragraph *head, ptr_word w) ; 
+void print_paragraphs(ptr_paragraph head) ;
 
