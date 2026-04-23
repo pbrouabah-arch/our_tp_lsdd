@@ -121,3 +121,31 @@ void add_paragraph(ptr_paragraph *head, ptr_word w) {
     set_next_para(curr, new_para);
 }
 /*..............................................................................................................................*/
+void print_paragraphs(ptr_paragraph head) {
+
+    // empty list
+    if (head == NULL) {
+        printf("(there is no  paragraph)\n");
+        return;
+    }
+
+    ptr_paragraph curr_para = head;
+    int para_number = 1;
+
+    while (curr_para != NULL) {
+
+        printf("***Paragraphe %d ***\n", para_number);
+
+        
+        ptr_word curr_word = return_words(curr_para);
+        while (curr_word != NULL) {
+            printf("%s ", value(curr_word));
+            curr_word = next_node(curr_word);
+        }
+
+        printf("\n\n");
+        para_number++;
+        curr_para = next_para(curr_para);
+    }
+}
+
