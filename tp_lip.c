@@ -97,3 +97,27 @@ ptr_word return_words(ptr_paragraph p) {
 ptr_paragraph next_para(ptr_paragraph p) {
     return p->next;
 }
+/*.................................................................................................*/
+void add_paragraph(ptr_paragraph *head, ptr_word w) {
+    
+    // create the new paragraph
+    ptr_paragraph new_para;
+    alloc_paragraph(&new_para);
+    set_words(new_para, w);
+
+    //  if the list is empty this paragraph will be the first one 
+    if (*head == NULL) {
+        *head = new_para;
+        return;
+    }
+
+    //  else 
+    ptr_paragraph curr = *head;
+    while (next_para(curr) != NULL) {
+        curr = next_para(curr);
+    }
+
+    
+    set_next_para(curr, new_para);
+}
+/*..............................................................................................................................*/
