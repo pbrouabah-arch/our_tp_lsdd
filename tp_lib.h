@@ -44,5 +44,6 @@ void add_paragraph(ptr_paragraph *head, ptr_word w);
 void print_paragraphs(ptr_paragraph head);
 void print_paragraphs(ptr_paragraph head);
 void free_paragraphs(ptr_paragraph head);
-
+/*----------READ FILES------------------------*/
+ptr_paragraph read_file(char* filename);
 
