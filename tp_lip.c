@@ -150,30 +150,7 @@ void print_paragraphs(ptr_paragraph head) {
         curr_para = next_para(curr_para);
     }
 }
-//*---------------------------------------------------------------------------------
-void print_paragraphs(ptr_paragraph head) {
-    if (head == NULL) {
-        printf("(there is no paragraphs)\n");
-        return;
-    }
 
-    ptr_paragraph curr_para = head;
-    int para_number = 1;
-
-    while (curr_para != NULL) {
-        printf("*** Paragraphe %d ***\n", para_number);
-
-        ptr_word curr_word = return_words(curr_para);
-        while (curr_word != NULL) {
-            printf("%s ", words(curr_word));
-            curr_word = next(curr_word);
-        }
-
-        printf("\n\n");
-        para_number++;
-        curr_para = next_para(curr_para);
-    }
-}
 //----------------------------------------------------------------------------------------------------
 void free_paragraphs(ptr_paragraph head) {
     ptr_paragraph curr = head;
