@@ -163,3 +163,45 @@ void free_paragraphs(ptr_paragraph head) {
         free_paragraph(temp);            // then free the paragraph node itself
     }
 }
+//-------------------------------------------------------------------------------------------------------
+ptr_paragraph read_file(char* filename) {
+    FILE* f = fopen(filename, "r");
+    if (f == NULL) {
+        printf("Error: cannot open file '%s'\n", filename);
+        return NULL;
+    }
+
+    ptr_paragraph head = NULL;
+    ptr_word word_list = NULL;
+    char line[1000];
+
+    while (fgets(line, sizeof(line), f) != NULL) {
+
+      
+        line[strcspn(line, "\n")] = '\0';
+
+        if (strlen(line) == 0) {
+            // empty line = end of a paragraph
+            if (word_list != NULL) {
+                add_paragraph(&head, word_list);
+                word_list = NULL;  // reset for next paragraph
+            }
+        } else {
+          
+            char* token = strtok(line, " ");
+            while (token != NULL) {
+                add_word(&word_list, token);
+                token = strtok(NULL, " ");
+            }
+        }
+    }
+
+   
+    if (word_list != NULL) {
+        add_paragraph(&head, word_list);
+    }
+
+    fclose(f);
+    return head;
+}
+//---------------------------------------------------------------------------------------------------
