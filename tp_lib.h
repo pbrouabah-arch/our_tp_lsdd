@@ -43,5 +43,5 @@ ptr_paragraph next_para(ptr_paragraph p);
 void add_paragraph(ptr_paragraph *head, ptr_word w);
 void print_paragraphs(ptr_paragraph head);
 
-#endif
+
 
