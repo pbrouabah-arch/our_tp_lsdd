@@ -205,3 +205,61 @@ ptr_paragraph read_file(char* filename) {
     return head;
 }
 //---------------------------------------------------------------------------------------------------
+void alloc_file(ptr_file *p) {
+    *p = malloc(sizeof(file_node));
+    (*p)->paragraphs = NULL;
+    (*p)->next = NULL;
+}
+
+ptr_paragraph get_paragraphs(ptr_file p) {
+    return p->paragraphs;
+}
+
+ptr_file next_file(ptr_file p) {
+    return p->next;
+}
+//--------------------------------------------------------------------------------------------
+// read N files and return a file list
+ptr_file read_files(char* filenames[], int n) {
+    ptr_file head = NULL;
+    ptr_file tail = NULL;
+
+    for (int i = 0; i < n; i++) {
+        ptr_file new_file;
+        alloc_file(&new_file);
+        strcpy(new_file->filename, filenames[i]);
+        new_file->paragraphs = read_file(filenames[i]);
+        new_file->next = NULL;
+
+        if (head == NULL) {
+            head = new_file;
+            tail = new_file;
+        } else {
+            tail->next = new_file;
+            tail = new_file;
+        }
+    }
+    return head;
+}
+//------------------------------------------------------------------------------------------
+void print_files(ptr_file head) {
+    ptr_file curr = head;
+    int file_num = 1;
+    while (curr != NULL) {
+        printf("========== File %d: %s ==========\n", file_num, curr->filename);
+        print_paragraphs(curr->paragraphs);
+        file_num++;
+        curr = next_file(curr);
+    }
+}
+//-------------------------------------------------------------------
+void free_files(ptr_file head) {
+    ptr_file curr = head;
+    ptr_file temp = NULL;
+    while (curr != NULL) {
+        temp = curr;
+        curr = next_file(curr);
+        free_paragraphs(temp->paragraphs);
+        free(temp);
+    }
+}
