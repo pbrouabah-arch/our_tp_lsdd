@@ -15,13 +15,13 @@ typedef word_node* ptr_word;
 
 /* phrase node */
 typedef struct phrase_node {
-    char phrase[500];           
+    struct word_node* words;
     struct phrase_node* next;
 } phrase_node;
 typedef phrase_node* ptr_phrase;
 /* paragraph node */
 typedef struct paragraph_node {
-    struct phrase_node* phrases; 
+    struct phrase_node* phrases;
     struct paragraph_node* next;
 } paragraph_node;
 typedef paragraph_node* ptr_paragraph;
@@ -47,14 +47,15 @@ void print_words(ptr_word h);
 /* abstract machines of phrase */
 void alloc_phrase(ptr_phrase *p);
 void free_phrase(ptr_phrase p);
-void set_phrase(ptr_phrase p, char* s);
+void set_phrase_words (ptr_phrase p, ptr_word w);
 void link_phrase(ptr_phrase p, ptr_phrase q);
-char* get_phrase(ptr_phrase p);
+ptr_word get_phrase_words (ptr_phrase p);
 ptr_phrase next_phrase(ptr_phrase p);
-void add_phrase(ptr_phrase *head, char* s);
+void add_phrase(ptr_phrase *head, ptr_word w);
 void print_phrases(ptr_phrase head);
 void free_phrases(ptr_phrase head);
-bool exists_phrase(ptr_phrase head, char* s);
+bool equal_words(ptr_word a, ptr_word b);
+bool equal_phrases(ptr_phrase a, ptr_phrase b);
 /* abstract machines of paragraph */
 
 void alloc_paragraph(ptr_paragraph *p);
@@ -67,14 +68,23 @@ void add_paragraph(ptr_paragraph *head, ptr_phrase ph);
 void print_paragraphs(ptr_paragraph head);
 void free_paragraphs(ptr_paragraph head);
 ptr_paragraph read_file(char* filename);
+bool exists_paragraph(ptr_paragraph head1, ptr_paragraph head2);
 /* abstract machines of file */
 void alloc_file(ptr_file *p);
 void free_file(ptr_file p);
-ptr_paragraph get_paragraphs(ptr_file p);
+void set_filename(ptr_file p, char *name);
+void link_file(ptr_file p, ptr_file q);
+char* get_filename(ptr_file p);
+ptr_paragraph get_file_paragraphs (ptr_file p);
+void set_file_paragraphs(ptr_file p, ptr_paragraph ph);
 ptr_file next_file(ptr_file p);
-ptr_file read_files(char* filenames[], int n);
+ptr_file read_files(char *filenames[], int n);
 void print_files(ptr_file head);
 void free_files(ptr_file head);
+/*----operation------------------------------------------------*/
+
+void set_intersection(ptr_paragraph headp, ptr_paragraph headq);
+void set_difference(ptr_paragraph headp, ptr_paragraph headq);
 
 /* OPERATIONS  */
 ptr_paragraph set_union(ptr_paragraph A, ptr_paragraph B) ;
