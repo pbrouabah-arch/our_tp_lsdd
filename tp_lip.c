@@ -79,6 +79,68 @@ void print_words(ptr_word h) {
     }
     printf("\n");
 }
+/*----------------------------------------------------------*/
+void alloc_phrase(ptr_phrase *p) {
+    *p = malloc(sizeof(phrase_node));
+    (*p)->phrase[0] = '\0';    ← empty string
+    (*p)->next = NULL;
+}
+
+/*----------------------------------------------------------*/
+void free_phrase(ptr_phrase p) {
+    free(p);
+}
+/*----------------------------------------------------------*/
+void set_phrase(ptr_phrase p, char* s) {
+    strcpy(p->phrase, s);      ← copy phrase string
+}
+/*----------------------------------------------------------*/
+void link_phrase(ptr_phrase p, ptr_phrase q) {
+    p->next = q;
+}
+/*----------------------------------------------------------*/
+char* get_phrase(ptr_phrase p) {
+    return p->phrase;
+}
+/*----------------------------------------------------------*/
+ptr_phrase next_phrase(ptr_phrase p) {
+    return p->next;
+}
+/*----------------------------------------------------------*/
+void add_phrase(ptr_phrase *head, char* s) {
+    ptr_phrase new_phrase;
+    alloc_phrase(&new_phrase);
+    set_phrase(new_phrase, s);     ← set the phrase text
+    if (*head == NULL) {
+        *head = new_phrase;
+        return;
+    }
+    ptr_phrase curr = *head;
+    while (next_phrase(curr) != NULL) {
+        curr = next_phrase(curr);
+    }
+    link_phrase(curr, new_phrase);
+}
+/*----------------------------------------------------------*/
+void print_phrases(ptr_phrase head) {
+    ptr_phrase curr = head;
+    int num = 1;
+    while (curr != NULL) {
+        printf("  phrase %d: %s\n", num, get_phrase(curr));
+        curr = next_phrase(curr);
+        num++;
+    }
+}
+/*----------------------------------------------------------*/
+void free_phrases(ptr_phrase head) {
+    ptr_phrase curr = head;
+    ptr_phrase temp = NULL;
+    while (curr != NULL) {
+        temp = curr;
+        curr = next_phrase(curr);
+        free_phrase(temp);
+    }
+}
 
 /* --------------------------------------------------------- */
 
