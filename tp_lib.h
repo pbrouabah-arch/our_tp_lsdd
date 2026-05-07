@@ -76,4 +76,7 @@ ptr_file read_files(char* filenames[], int n);
 void print_files(ptr_file head);
 void free_files(ptr_file head);
 
+/* OPERATIONS  */
+ptr_paragraph set_union(ptr_paragraph A, ptr_paragraph B) ;
+
 #endif
