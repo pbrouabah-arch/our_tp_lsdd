@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tp_lib.h"
+#include <stdbool.h>
+
 void allocate(ptr_word *p) {
     *p = malloc(sizeof(word_node));
 }
@@ -82,38 +84,37 @@ void print_words(ptr_word h) {
 /*----------------------------------------------------------*/
 void alloc_phrase(ptr_phrase *p) {
     *p = malloc(sizeof(phrase_node));
-    (*p)->phrase[0] = '\0';   // ← empty string
-    (*p)->next = NULL;
+    (*p)->words = NULL;
+    (*p)->next  = NULL;
 }
-
 /*----------------------------------------------------------*/
 void free_phrase(ptr_phrase p) {
     free(p);
 }
 /*----------------------------------------------------------*/
-void set_phrase(ptr_phrase p, char* s) {
-    strcpy(p->phrase, s);    //  ← copy phrase string
+void set_phrase_words(ptr_phrase p, ptr_word w) {
+    p->words = w;
 }
 /*----------------------------------------------------------*/
 void link_phrase(ptr_phrase p, ptr_phrase q) {
     p->next = q;
 }
 /*----------------------------------------------------------*/
-char* get_phrase(ptr_phrase p) {
-    return p->phrase;
+ptr_word get_phrase_words(ptr_phrase p) {
+    return p->words;
 }
 /*----------------------------------------------------------*/
 ptr_phrase next_phrase(ptr_phrase p) {
     return p->next;
 }
 /*----------------------------------------------------------*/
-void add_phrase(ptr_phrase *head, char* s) {
+void add_phrase(ptr_phrase *head, ptr_word w) {
     ptr_phrase new_phrase;
     alloc_phrase(&new_phrase);
-    set_phrase(new_phrase, s);    // ← set the phrase text
+    set_phrase_words(new_phrase, w);
     if (*head == NULL) {
         *head = new_phrase;
-        return;
+
     }
     ptr_phrase curr = *head;
     while (next_phrase(curr) != NULL) {
@@ -126,7 +127,13 @@ void print_phrases(ptr_phrase head) {
     ptr_phrase curr = head;
     int num = 1;
     while (curr != NULL) {
-        printf("  phrase %d: %s\n", num, get_phrase(curr));
+        printf("  phrase %d: ", num);
+        ptr_word w = get_phrase_words(curr);
+        while (w != NULL) {
+            printf("%s ", words(w));
+            w = next(w);
+        }
+        printf("\n");
         curr = next_phrase(curr);
         num++;
     }
@@ -138,11 +145,11 @@ void free_phrases(ptr_phrase head) {
     while (curr != NULL) {
         temp = curr;
         curr = next_phrase(curr);
+        free_words(get_phrase_words(temp));
         free_phrase(temp);
     }
 }
-
-/* --------------------------------------------------------- */
+/*----------------------------------------------------------*/
 
 void alloc_paragraph(ptr_paragraph *p) {
     *p = malloc(sizeof(paragraph_node));
@@ -212,6 +219,79 @@ void free_paragraphs(ptr_paragraph head) {
         free_paragraph(temp);
     }
 }
+//-------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------
+bool equal_words(ptr_word a, ptr_word b) {
+    while (a != NULL && b != NULL) {
+        if (strcmp(words(a), words(b)) != 0)
+            return false;
+        a = next(a);
+        b = next(b);
+    }
+    return a == NULL && b == NULL;
+}
+/*----------------------------------------------------------*/
+bool equal_phrases(ptr_phrase a, ptr_phrase b) {
+    while (a != NULL && b != NULL) {
+        if (!equal_words(get_phrase_words(a), get_phrase_words(b)))
+            return false;
+        a = next_phrase(a);
+        b = next_phrase(b);
+    }
+    return a == NULL && b == NULL;
+}
+/*----------------------------------------------------------*/
+bool exists_paragraph(ptr_paragraph head, ptr_paragraph q) {
+    ptr_paragraph p = head;
+    while (p != NULL) {
+        if (equal_phrases(get_phrases(p), get_phrases(q)))
+            return true;
+        p = next_para(p);
+    }
+    return false;
+}
+
+/*--------------------------------------------------------------------*/
+void set_union(ptr_paragraph headp, ptr_paragraph headq) {
+    // print all paragraphs from P
+    ptr_paragraph p = headp;
+    while (p != NULL) {
+        print_phrases(get_phrases(p));
+        p = next_para(p);
+    }
+    // print only paragraphs from Q that are not in P
+    ptr_paragraph q = headq;
+    while (q != NULL) {
+        if (!exists_paragraph(headp, q)) {
+            print_phrases(get_phrases(q));
+        }
+        q = next_para(q);
+    }
+}
+/*---------------------------------------------------------------------*/
+void set_intersection(ptr_paragraph headp, ptr_paragraph headq) {
+    // print only paragraphs that exist in both
+    ptr_paragraph q = headq;
+    while (q != NULL) {
+        if (exists_paragraph(headp, q)) {
+            print_phrases(get_phrases(q));
+        }
+        q = next_para(q);
+    }
+}
+/*------------------------------------------------------------------------*/
+void set_difference(ptr_paragraph headp, ptr_paragraph headq) {
+    // print only paragraphs from P that are NOT in Q
+    ptr_paragraph p = headp;
+    while (p != NULL) {
+        if (!exists_paragraph(headq, p)) {
+            print_phrases(get_phrases(p));
+        }
+        p = next_para(p);
+    }
+}
+
 //-------------------------------------------------------------------------------------------------------
 ptr_paragraph read_file(char* filename) {
 
