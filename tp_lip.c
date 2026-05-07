@@ -144,127 +144,121 @@ void free_phrases(ptr_phrase head) {
 
 /* --------------------------------------------------------- */
 
-void alloc_paragraph(ptr_paragraph *p) {   // fixed: was "all_paragraph" in .h
+void alloc_paragraph(ptr_paragraph *p) {
     *p = malloc(sizeof(paragraph_node));
-    (*p)->words = NULL;
-    (*p)->next  = NULL;
+    (*p)->phrases = NULL;
+    (*p)->next = NULL;
 }
-//---------------------------------------------------------------------------
+/*---------------------------------------------------------*/
+
 void free_paragraph(ptr_paragraph p) {
     free(p);
 }
-
-void up_words(ptr_paragraph p, ptr_word w) {
-    p->words = w;
+/*---------------------------------------------------------*/
+void set_phrases(ptr_paragraph p, ptr_phrase ph) {
+    p->phrases = ph;
 }
-//-----------------------------------------------------------------------------------------
-void up_next_para(ptr_paragraph p, ptr_paragraph q) {
+/*---------------------------------------------------------*/
+void link_paragraph(ptr_paragraph p, ptr_paragraph q) {
     p->next = q;
 }
-
-ptr_word return_words(ptr_paragraph p) {
-    return p->words;
+/*---------------------------------------------------------*/
+ptr_phrase get_phrases(ptr_paragraph p) {
+    return p->phrases;
 }
-//--------------------------------------------------------------------------------------------
+/*---------------------------------------------------------*/
 ptr_paragraph next_para(ptr_paragraph p) {
     return p->next;
 }
-//------------------------------------------------------------------------------------------
-
-void add_paragraph(ptr_paragraph *head, ptr_word w) {
+/*---------------------------------------------------------*/
+void add_paragraph(ptr_paragraph *head, ptr_phrase ph) {
     ptr_paragraph new_para;
     alloc_paragraph(&new_para);
-    up_words(new_para, w);
-
+    set_phrases(new_para, ph);
     if (*head == NULL) {
         *head = new_para;
         return;
     }
-
     ptr_paragraph curr = *head;
     while (next_para(curr) != NULL) {
         curr = next_para(curr);
     }
-
-    up_next_para(curr, new_para);   
+    link_paragraph(curr, new_para);
 }
-//--------------------------------------------------------------------
+/*---------------------------------------------------------*/
 void print_paragraphs(ptr_paragraph head) {
     if (head == NULL) {
-        printf("(there is no paragraph)\n");
+        printf("(no paragraphs)\n");
         return;
     }
-
-    ptr_paragraph curr_para = head;
-    int para_number = 1;
-
-    while (curr_para != NULL) {
-        printf("*** Paragraphe %d ***\n", para_number);
-
-        ptr_word curr_word = return_words(curr_para);
-        while (curr_word != NULL) {
-            printf("%s ", words(curr_word));      
-            curr_word = next(curr_word);         
-        }
-
-        printf("\n\n");
-        para_number++;
-        curr_para = next_para(curr_para);
+    ptr_paragraph curr = head;
+    int para_num = 1;
+    while (curr != NULL) {
+        printf("*** Paragraph %d ***\n", para_num);
+        print_phrases(get_phrases(curr));
+        printf("\n");
+        para_num++;
+        curr = next_para(curr);
     }
 }
-
-//----------------------------------------------------------------------------------------------------
+/*---------------------------------------------------------*/
 void free_paragraphs(ptr_paragraph head) {
     ptr_paragraph curr = head;
     ptr_paragraph temp = NULL;
-
     while (curr != NULL) {
         temp = curr;
         curr = next_para(curr);
-        free_words(return_words(temp));  // free the words list inside first
-        free_paragraph(temp);            // then free the paragraph node itself
+        free_phrases(get_phrases(temp));
+        free_paragraph(temp);
     }
 }
 //-------------------------------------------------------------------------------------------------------
 ptr_paragraph read_file(char* filename) {
+
     FILE* f = fopen(filename, "r");
     if (f == NULL) {
-        printf("Error: cannot open file '%s'\n", filename);
+        printf("Error: cannot open %s\n", filename);
         return NULL;
     }
 
-    ptr_paragraph head = NULL;
-    ptr_word word_list = NULL;
-    char line[1000];
+    ptr_paragraph para_list = NULL;
+    ptr_phrase current_phrases = NULL;
+    char line[500];
 
-    while (fgets(line, sizeof(line), f) != NULL) {
+    while (fgets(line, 500, f) != NULL) {
 
-      
-        line[strcspn(line, "\n")] = '\0';
-
-        if (strlen(line) == 0) {
-            // empty line = end of a paragraph
-            if (word_list != NULL) {
-                add_paragraph(&head, word_list);
-                word_list = NULL;  // reset for next paragraph
+        /* empty line → end of paragraph */
+        if (line[0] == '\n' || line[0] == '\r') {
+            if (current_phrases != NULL) {
+                add_paragraph(&para_list, current_phrases);
+                current_phrases = NULL;  ← reset for next paragraph
             }
+
         } else {
-          
-            char* token = strtok(line, " ");
-            while (token != NULL) {
-                add_word(&word_list, token);
-                token = strtok(NULL, " ");
+
+            /* split line by "." to get phrases */
+            char* sentence = strtok(line, ".");
+            while (sentence != NULL) {
+
+                /* skip empty sentences */
+                if (sentence[0] != '\n' && 
+                    sentence[0] != '\r' && 
+                    sentence[0] != ' ') {
+
+                    add_phrase(&current_phrases, sentence);
+                }
+                sentence = strtok(NULL, ".");
             }
         }
     }
 
-   
-    if (word_list != NULL) {
-        add_paragraph(&head, word_list);
+    /* save last paragraph */
+    if (current_phrases != NULL) {
+        add_paragraph(&para_list, current_phrases);
     }
 
     fclose(f);
-    return head;
+    return para_list;
 }
 //---------------------------------------------------------------------------------------------------
 void alloc_file(ptr_file *p) {
