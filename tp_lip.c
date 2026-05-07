@@ -319,3 +319,53 @@ void free_files(ptr_file head) {
         free(temp);
     }
 }
+//------------------------------------------------------------------------------------------
+// union of two paragraphs → all phrases, no duplicates
+ptr_paragraph set_union(ptr_paragraph A, ptr_paragraph B) {
+    ptr_paragraph result = NULL;
+
+    // first : we add all phrases from A
+    ptr_paragraph curr_para = A;
+    while (curr_para != NULL) {
+        ptr_phrase curr_phrase = get_phrases(curr_para);
+        ptr_phrase new_phrases = NULL;
+
+        while (curr_phrase != NULL) {
+            add_phrase(&new_phrases, get_phrase(curr_phrase));
+            curr_phrase = next_phrase(curr_phrase);
+        }
+
+        add_paragraph(&result, new_phrases);
+        curr_para = next_para(curr_para);
+    }
+
+    // second : we  add phrases from B only if not already in A
+    curr_para = B;
+    while (curr_para != NULL) {
+        ptr_phrase curr_phrase = get_phrases(curr_para);
+        ptr_phrase new_phrases = NULL;
+
+        while (curr_phrase != NULL) {
+            //we  check if this phrase exists anywhere in A
+            ptr_paragraph check = A;
+            bool found = false;
+            while (check != NULL && !found) {
+                if (exists_phrase(get_phrases(check), get_phrase(curr_phrase)))
+                    found = true;
+                check = next_para(check);
+            }
+
+            if (!found)
+                add_phrase(&new_phrases, get_phrase(curr_phrase));
+
+            curr_phrase = next_phrase(curr_phrase);
+        }
+
+        if (new_phrases != NULL)
+            add_paragraph(&result, new_phrases);
+
+        curr_para = next_para(curr_para);
+    }
+
+    return result;
+}
