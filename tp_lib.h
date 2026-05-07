@@ -13,13 +13,18 @@ typedef struct word_node {
 } word_node;
 typedef word_node* ptr_word;
 
+/* phrase node */
+typedef struct phrase_node {
+    char phrase[500];           
+    struct phrase_node* next;
+} phrase_node;
+typedef phrase_node* ptr_phrase;
 /* paragraph node */
 typedef struct paragraph_node {
-    struct word_node* words;
+    struct phrase_node* phrases; 
     struct paragraph_node* next;
 } paragraph_node;
 typedef paragraph_node* ptr_paragraph;
-
 /* file node */
 typedef struct file_node {
     char filename[100];
