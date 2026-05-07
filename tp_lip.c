@@ -82,7 +82,7 @@ void print_words(ptr_word h) {
 /*----------------------------------------------------------*/
 void alloc_phrase(ptr_phrase *p) {
     *p = malloc(sizeof(phrase_node));
-    (*p)->phrase[0] = '\0';    ← empty string
+    (*p)->phrase[0] = '\0';   // ← empty string
     (*p)->next = NULL;
 }
 
@@ -92,7 +92,7 @@ void free_phrase(ptr_phrase p) {
 }
 /*----------------------------------------------------------*/
 void set_phrase(ptr_phrase p, char* s) {
-    strcpy(p->phrase, s);      ← copy phrase string
+    strcpy(p->phrase, s);    //  ← copy phrase string
 }
 /*----------------------------------------------------------*/
 void link_phrase(ptr_phrase p, ptr_phrase q) {
@@ -110,7 +110,7 @@ ptr_phrase next_phrase(ptr_phrase p) {
 void add_phrase(ptr_phrase *head, char* s) {
     ptr_phrase new_phrase;
     alloc_phrase(&new_phrase);
-    set_phrase(new_phrase, s);     ← set the phrase text
+    set_phrase(new_phrase, s);    // ← set the phrase text
     if (*head == NULL) {
         *head = new_phrase;
         return;
@@ -231,7 +231,7 @@ ptr_paragraph read_file(char* filename) {
         if (line[0] == '\n' || line[0] == '\r') {
             if (current_phrases != NULL) {
                 add_paragraph(&para_list, current_phrases);
-                current_phrases = NULL;  ← reset for next paragraph
+                current_phrases = NULL;  //    ← reset for next paragraph
             }
 
         } else {
