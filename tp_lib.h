@@ -68,25 +68,25 @@ void add_paragraph(ptr_paragraph *head, ptr_phrase ph);
 void print_paragraphs(ptr_paragraph head);
 void free_paragraphs(ptr_paragraph head);
 ptr_paragraph read_file(char* filename);
-bool exists_paragraph(ptr_paragraph head1, ptr_paragraph head2);
+bool exists_paragraph(ptr_paragraph head, ptr_paragraph q);
 /* abstract machines of file */
 void alloc_file(ptr_file *p);
 void free_file(ptr_file p);
 void set_filename(ptr_file p, char *name);
 void link_file(ptr_file p, ptr_file q);
 char* get_filename(ptr_file p);
-ptr_paragraph get_file_paragraphs (ptr_file p);
+ptr_paragraph  get_file_paragraphs(ptr_file p);
 void set_file_paragraphs(ptr_file p, ptr_paragraph ph);
 ptr_file next_file(ptr_file p);
 ptr_file read_files(char *filenames[], int n);
 void print_files(ptr_file head);
 void free_files(ptr_file head);
-
-
-/*     OPERATIONS      */
-
-ptr_paragraph set_union(ptr_paragraph A, ptr_paragraph B) ;
+/*----operation------------------------------------------------*/
+void set_union(ptr_paragraph headp,ptr_paragraph headq);
 void set_intersection(ptr_paragraph headp, ptr_paragraph headq);
 void set_difference(ptr_paragraph headp, ptr_paragraph headq);
-
+/*--------------------------------------------------------------*/
+void clean_word(char* word);
+void clean_paragraph(ptr_paragraph head);
+void upper_paragraph(ptr_paragraph head);
 #endif
