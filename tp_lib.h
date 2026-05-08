@@ -81,12 +81,10 @@ ptr_file next_file(ptr_file p);
 ptr_file read_files(char *filenames[], int n);
 void print_files(ptr_file head);
 void free_files(ptr_file head);
-/*----operation------------------------------------------------*/
 
+
+/*     OPERATIONS      */
+ptr_paragraph set_union(ptr_paragraph A, ptr_paragraph B) ;
 void set_intersection(ptr_paragraph headp, ptr_paragraph headq);
 void set_difference(ptr_paragraph headp, ptr_paragraph headq);
-
-/* OPERATIONS  */
-ptr_paragraph set_union(ptr_paragraph A, ptr_paragraph B) ;
-
 #endif
