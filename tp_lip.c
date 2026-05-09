@@ -317,14 +317,14 @@ void free_file(ptr_file p) {
     free(p);
 }
 
+
+//-----------------------------------------------------------------------------------------------------------
 /*
  * Opens the file with the given filename and parses it into a paragraph list.
  * Each non-empty line becomes a phrase (list of words).
  * Empty lines act as paragraph delimiters.
  * Returns the head of the paragraph list, or NULL on error.
  */
-//-----------------------------------------------------------------------------------------------------------
-
 ptr_paragraph read_file(char* filename) {
     FILE* f = fopen(filename, "r");
     if (f == NULL) { printf("Error: cannot open %s\n", filename); return NULL; }
@@ -382,12 +382,13 @@ ptr_file next_file(ptr_file p) {
     return p->next;
 }
 
+
+//-----------------------------------------------------------------------------------------------------------------
 /*
  * Reads n files from the filenames array, builds a linked list of file nodes,
  * each containing the parsed paragraph list of the corresponding file.
  * Returns the head of the file list.
  */
-//-----------------------------------------------------------------------------------------------------------------
 ptr_file read_files(char* filenames[], int n) {
     ptr_file head = NULL;
     ptr_file tail = NULL;
@@ -431,12 +432,13 @@ void free_files(ptr_file head) {
     }
 }
 
+
+//-------------------------------------------------------------------------------------------------------
 /*
  * Prints the union of two paragraph lists (headp and headq).
  * All paragraphs from P are printed, then paragraphs from Q
  * that do not already exist in P.
  */
-//-------------------------------------------------------------------------------------------------------
 void set_union(ptr_paragraph headp, ptr_paragraph headq) {
     ptr_paragraph p = headp;
     while (p != NULL) {
@@ -452,11 +454,12 @@ void set_union(ptr_paragraph headp, ptr_paragraph headq) {
     }
 }
 
+
+//------------------------------------------------------------------------------------------------------------------------------------
 /*
  * Prints the intersection of two paragraph lists (headp and headq).
  * Only paragraphs that exist in both lists are printed.
  */
-//------------------------------------------------------------------------------------------------------------------------------------
 void set_intersection(ptr_paragraph headp, ptr_paragraph headq) {
     ptr_paragraph q = headq;
     while (q != NULL) {
@@ -467,11 +470,12 @@ void set_intersection(ptr_paragraph headp, ptr_paragraph headq) {
     }
 }
 
+
+//---------------------------------------------------------------------------------------------------------
 /*
  * Prints the difference P - Q of two paragraph lists.
  * Only paragraphs from P that do NOT exist in Q are printed.
  */
-//---------------------------------------------------------------------------------------------------------
 void set_difference(ptr_paragraph headp, ptr_paragraph headq) {
     ptr_paragraph p = headp;
     while (p != NULL) {
@@ -509,11 +513,12 @@ void upper_paragraph(ptr_paragraph head) {
     }
 }
 
+
+//--------------------------------------------------------------------------------------------------------
 /*
  * Removes all non-alphanumeric characters from word, except periods.
  * The word is modified in place.
  */
-//--------------------------------------------------------------------------------------------------------
 void clean_word(char* word) {
     int len = strlen(word);
     int j = 0;
