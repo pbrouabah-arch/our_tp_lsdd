@@ -41,7 +41,7 @@ void ass_adr(ptr_word p, ptr_word q);
 char* words(ptr_word p);
 ptr_word next(ptr_word p);
 void add_word(ptr_word *h, char* v);
-bool exists_word(ptr_word *h, char* v);
+bool exists_word(ptr_word h, char* v);
 void free_words(ptr_word h);
 void print_words(ptr_word h);
 /* abstract machines of phrase */
