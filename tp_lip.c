@@ -57,8 +57,8 @@ void add_word(ptr_word *h, char* v) {
 }
 //--------------------------------------------------------------------------------------------------
 /* Returns true if word v exists in the word list *h, false otherwise */
-bool exists_word(ptr_word *h, char* v) {
-    ptr_word p = *h;
+bool exists_word(ptr_word h, char* v) {
+    ptr_word p = h;
     while (p != NULL) {
         if (strcmp(words(p), v) == 0)
             return true;
@@ -136,6 +136,7 @@ void add_phrase(ptr_phrase *head, ptr_word w) {
 }
 //----------------------------------------------------------------------------------------------------------------------------
 /* Prints all phrases in the list with numbering, and the words in each phrase */
+/*the phrase end with NIL not "." that means it end when a new line begin */
 void print_phrases(ptr_phrase head) {
     ptr_phrase curr = head;
     int num = 1;
@@ -250,13 +251,21 @@ void free_paragraphs(ptr_paragraph head) {
 
 /* Returns true if two word lists a and b are equal (same words in same order) */
 bool equal_words(ptr_word a, ptr_word b) {
-    while (a != NULL && b != NULL) {
-        if (strcmp(words(a), words(b)) != 0)
+    /* every word of a must exist in b */
+    ptr_word pa = a;
+    while (pa != NULL) {
+        if (!exists_word(b, words(pa)))
             return false;
-        a = next(a);
-        b = next(b);
+        pa = next(pa);
     }
-    return a == NULL && b == NULL;
+    /* every word of b must exist in a */
+    ptr_word pb = b;
+    while (pb != NULL) {
+        if (!exists_word(a, words(pb)))
+            return false;
+        pb = next(pb);
+    }
+    return true;
 }
 //-------------------------------------------------------------------------------------------------------
 
@@ -327,36 +336,54 @@ void free_file(ptr_file p) {
  */
 ptr_paragraph read_file(char* filename) {
     FILE* f = fopen(filename, "r");
-    if (f == NULL) { printf("Error: cannot open %s\n", filename); return NULL; }
+    if (f == NULL) {
+        printf("Error: cannot open %s\n", filename);
+        return NULL;
+    }
 
-    ptr_paragraph para_list = NULL;
+    ptr_paragraph para_list    = NULL;
     ptr_phrase current_phrases = NULL;
     char line[500];
 
     while (fgets(line, 500, f) != NULL) {
-        line[strcspn(line, "\n")] = '\0';  /* remove trailing newline */
+        /* remove trailing newline */
+        line[strcspn(line, "\n")] = '\0';
 
+        /* empty line → end of paragraph */
         if (strlen(line) == 0) {
-            /* empty line: finalize current paragraph */
             if (current_phrases != NULL) {
                 add_paragraph(&para_list, current_phrases);
                 current_phrases = NULL;
             }
+
         } else {
-            /* tokenize the line into words and build a phrase */
-            ptr_word word_head = NULL;
-            char* token = strtok(line, " \t");
-            while (token != NULL) {
-                add_word(&word_head, token);
-                token = strtok(NULL, " \t");
+
+            /* split line by "." to get phrases */
+            char* sentence = strtok(line, ".");
+            while (sentence != NULL) {
+
+                /* extract words from sentence */
+                ptr_word word_head = NULL;
+                char* token = strtok(sentence, " \t\n\r");
+                while (token != NULL) {
+                    add_word(&word_head, token);
+                    token = strtok(NULL, " \t\n\r");
+                }
+
+                /* save phrase if not empty */
+                if (word_head != NULL) {
+                    add_phrase(&current_phrases, word_head);
+                }
+
+                sentence = strtok(NULL, ".");
             }
-            add_phrase(&current_phrases, word_head);
         }
     }
 
-    /* add the last paragraph if the file doesn't end with a blank line */
-    if (current_phrases != NULL)
+    /* save last paragraph */
+    if (current_phrases != NULL) {
         add_paragraph(&para_list, current_phrases);
+    }
 
     fclose(f);
     return para_list;
